@@ -1,0 +1,166 @@
+/* For understanind css 'display: grid' paradigm: https://css-tricks.com/snippets/css/complete-guide-grid/ */
+*{
+    box-sizing: border-box;
+}
+
+:root {
+    --animation-time: 4s; 
+
+    --animation-left-0: 5%;
+    --animation-left-25: 95%;
+    --animation-left-50: 95%;
+    --animation-left-75: 5%;
+    --animation-left-100: 5%;
+
+    --animation-top-0: 5%;
+    --animation-top-25: 5%;
+    --animation-top-50: 95%;
+    --animation-top-75: 95%;
+    --animation-top-100: 5%;
+
+    --animation-opacity-0: 1;
+    --animation-opacity-25: 1;
+    --animation-opacity-50: 1;
+    --animation-opacity-75: 1;
+    --animation-opacity-100: 1;
+
+    --animation-color-0: red;
+    --animation-color-25: yellow;
+    --animation-color-50: blue;
+    --animation-color-75: green;
+    --animation-color-100: red;
+    
+    --animation-blur-0: #0ff;
+    --animation-blur-25: #0ff;
+    --animation-blur-50: #0ff;
+    --animation-blur-75: #0ff;
+    --animation-blur-100: #0ff;
+
+    --animation-translateX-0: 0px;
+    --animation-translateX-25: 0px;
+    --animation-translateX-50: 0px;
+    --animation-translateX-75: 0px;
+    --animation-translateX-100: 0px;
+
+    --animation-translateY-0: 0px;
+    --animation-translateY-25: 0px;
+    --animation-translateY-50: 0px;
+    --animation-translateY-75: 0px;
+    --animation-translateY-100: 0px;
+  }
+body{
+    background-color: rgb(6, 44, 60);
+    color: whitesmoke;
+}
+/* game-container houses entire game */
+.game-container{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-column-gap: 10px;
+    grid-template-rows: auto;
+    grid-row-gap: 10px;
+    /* height: 98%;
+    width: 98%; */
+}
+.game-text{
+    font-family: 'Major Mono Display', monospace;
+    font-size: 20px;
+}
+
+/* game-menu houses title and options */
+.game-menu{
+    grid-column: 2 / span 6;
+    grid-row: 1 / span 1;
+    border: solid 8px rgb(2, 57, 81);
+    width: 75%;
+    margin: auto;
+}
+.game-title{
+    font-size: 32px;
+    text-align: center;
+}
+.game-instructions{
+    grid-column: 8 / span 2;
+    grid-row: 1 / span 1;
+}
+.game-button{
+    color:whitesmoke;
+    border-radius: 2px;
+    padding: 4px 8px;
+    text-align: center;
+    font-size: 20px;
+    width: 90%;
+    cursor: pointer;
+}
+.start-button{
+    grid-column: 3 / span 2;
+    grid-row: 2 / span 1;
+    background-color: rgb(33, 62, 39);
+}
+.pause-button{
+    grid-column: 5/ span 1;
+    grid-row: 2 / span 1;
+    background-color: #626262;
+}
+.quit-button{
+    grid-column: 6 / span 1;
+    grid-row: 2 / span 1;
+    background-color: rgb(10, 13, 19);
+}
+
+
+/* game hud houses time and score */
+.game-hud{
+    grid-column: 2 / span 6;
+    grid-row: 3 / span 1;
+    font-size: 28px;
+    text-align: center;
+}
+.borderstyle{
+    background-color: rgb(25, 31, 47);
+    border: solid 4px rgb(25, 31, 47);
+    border-radius: 4px;
+}
+
+
+/* graphics-container houses all game animations */
+.graphics-container{
+    grid-column: 2 / span 6;
+    grid-row: 4 / span 8;
+}
+.graphics{
+    /* width: 480px;
+    width: 640px; */
+    width: 800px;
+    /* height: 270px;
+    height: 360px; */
+    height: 450px;
+    margin: 20px;
+    border-radius: 5px;
+    border: solid 8px rgb(2, 57, 81);
+    background-color: #121212;
+    position: absolute;
+    overflow: hidden;
+}
+.particle{
+    padding: 3px;
+    top:800;
+    left:600;
+    position: relative;
+    height: 5px;
+    width: 5px;
+    border-color: black;
+    background-color: whitesmoke;
+    border-radius: 50%;
+    box-shadow: 0px 0px 2px 2px #0ff;
+    animation: particle var(--animation-time) ease infinite;
+    transform: translate(0px,0px);
+}
+
+@keyframes particle {
+    0%   {background-color: var(--animation-color-0); opacity: var(--animation-opacity-0); box-shadow: 0px 0px 3px 3px var(--animation-blur-0); transform: translate(var(--animation-translateX-0), var(--animation-translateY-0));}
+    25%  {background-color:var(--animation-color-25); opacity: var(--animation-opacity-25); box-shadow: 0px 0px 3px 3px var(--animation-blur-25); transform: translate(var(--animation-translateX-25), var(--animation-translateY-25));}
+    50%  {background-color:var(--animation-color-50); opacity: var(--animation-opacity-50); box-shadow: 0px 0px 2px 2px var(--animation-blur-50); transform: translate(var(--animation-translateX-50), var(--animation-translateY-50));}
+    75%  {background-color:var(--animation-color-75); opacity: var(--animation-opacity-75); box-shadow: 0px 0px 2px 2px var(--animation-blur-75); transform: translate(var(--animation-translateX-75), var(--animation-translateY-75));}
+    100% {background-color:var(--animation-color-100); opacity: var(--animation-opacity-100); box-shadow: 0px 0px 1px 1px var(--animation-blur-100); transform: translate(var(--animation-translateX-100), var(--animation-translateY-100));}
+}
