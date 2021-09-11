@@ -10,7 +10,7 @@
     <script src="space_game.js"></script>
     <title>Space Game</title>
 </head>
-<body>
+<body onload="startBackgroundAnimation()">
     <div class="game-container game-text">
 
         <div class="game-menu">
@@ -19,9 +19,9 @@
 
         <div class="game-instructions game-text">Use the keyboard Arrows to move and spacebar to shoot.</div>  
 
-        <button type="button" class="game-button start-button game-text" onClick="startAnimation('preGame')">Start</button>
-        <button type="button" class="game-button pause-button game-text" onClick="pauseAnimatio()">Pause</button>
-        <button type="button" class="game-button quit-button game-text" onClick="clearAnimation()">Quit</button>
+        <button type="button" class="game-button start-button game-text" onClick="startGame()">Start</button>
+        <button type="button" class="game-button pause-button game-text" onClick="pauseGame()">Pause</button>
+        <button type="button" class="game-button quit-button game-text" onClick="quitGame()">Quit</button>
         
         
 
@@ -31,7 +31,7 @@
         </div>
 
         <div class="graphics-container">
-            <div class="graphics" onload="startAnimation('preGame')"></div>
+            <div class="graphics"></div>
         </div>
 
         

@@ -4,49 +4,19 @@
 }
 
 :root {
-    --animation-time: 4s; 
+    --star-time: 4s; 
 
-    --animation-left-0: 5%;
-    --animation-left-25: 95%;
-    --animation-left-50: 95%;
-    --animation-left-75: 5%;
-    --animation-left-100: 5%;
+    --star-opacity: 1;
 
-    --animation-top-0: 5%;
-    --animation-top-25: 5%;
-    --animation-top-50: 95%;
-    --animation-top-75: 95%;
-    --animation-top-100: 5%;
-
-    --animation-opacity-0: 1;
-    --animation-opacity-25: 1;
-    --animation-opacity-50: 1;
-    --animation-opacity-75: 1;
-    --animation-opacity-100: 1;
-
-    --animation-color-0: red;
-    --animation-color-25: yellow;
-    --animation-color-50: blue;
-    --animation-color-75: green;
-    --animation-color-100: red;
+    --star-blur: rgb(200, 200, 200);
     
-    --animation-blur-0: #0ff;
-    --animation-blur-25: #0ff;
-    --animation-blur-50: #0ff;
-    --animation-blur-75: #0ff;
-    --animation-blur-100: #0ff;
+    --star-translateX: 0px; 
 
-    --animation-translateX-0: 0px;
-    --animation-translateX-25: 0px;
-    --animation-translateX-50: 0px;
-    --animation-translateX-75: 0px;
-    --animation-translateX-100: 0px;
-
-    --animation-translateY-0: 0px;
-    --animation-translateY-25: 0px;
-    --animation-translateY-50: 0px;
-    --animation-translateY-75: 0px;
-    --animation-translateY-100: 0px;
+    --star-translateY-0: 0px;
+    --star-translateY-25: 0px;
+    --star-translateY-50: 0px;
+    --star-translateY-75: 0px;
+    --star-translateY-100: 0px;
   }
 body{
     background-color: rgb(6, 44, 60);
@@ -129,12 +99,8 @@ body{
     grid-row: 4 / span 8;
 }
 .graphics{
-    /* width: 480px;
-    width: 640px; */
-    width: 800px;
-    /* height: 270px;
-    height: 360px; */
-    height: 450px;
+    width: 800px; /* width: 480px; width: 640px; */
+    height: 450px; /* height: 270px; height: 360px; */
     margin: 20px;
     border-radius: 5px;
     border: solid 8px rgb(2, 57, 81);
@@ -142,7 +108,7 @@ body{
     position: absolute;
     overflow: hidden;
 }
-.particle{
+.star{
     padding: 3px;
     top:800;
     left:600;
@@ -153,14 +119,72 @@ body{
     background-color: whitesmoke;
     border-radius: 50%;
     box-shadow: 0px 0px 2px 2px #0ff;
-    animation: particle var(--animation-time) ease infinite;
+    animation: star var(--star-time) ease infinite;
     transform: translate(0px,0px);
 }
 
-@keyframes particle {
-    0%   {background-color: var(--animation-color-0); opacity: var(--animation-opacity-0); box-shadow: 0px 0px 3px 3px var(--animation-blur-0); transform: translate(var(--animation-translateX-0), var(--animation-translateY-0));}
-    25%  {background-color:var(--animation-color-25); opacity: var(--animation-opacity-25); box-shadow: 0px 0px 3px 3px var(--animation-blur-25); transform: translate(var(--animation-translateX-25), var(--animation-translateY-25));}
-    50%  {background-color:var(--animation-color-50); opacity: var(--animation-opacity-50); box-shadow: 0px 0px 2px 2px var(--animation-blur-50); transform: translate(var(--animation-translateX-50), var(--animation-translateY-50));}
-    75%  {background-color:var(--animation-color-75); opacity: var(--animation-opacity-75); box-shadow: 0px 0px 2px 2px var(--animation-blur-75); transform: translate(var(--animation-translateX-75), var(--animation-translateY-75));}
-    100% {background-color:var(--animation-color-100); opacity: var(--animation-opacity-100); box-shadow: 0px 0px 1px 1px var(--animation-blur-100); transform: translate(var(--animation-translateX-100), var(--animation-translateY-100));}
+.ship-container{
+    position: absolute;
+    width: 50%;
+    margin: auto;
+    transform: translate(200px, 240px);
+  }
+  .ship{
+    position: relative;
+    width: 50%;
+    margin: auto;
+    transform: scale(0.2);
+  }
+  .ship-component{
+    position: absolute;
+    width: 0;
+    height: 0;
+
+  }
+  .ship-nose{
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 110px solid red; 
+  }
+  .ship-body{
+    position: absolute;
+    top: 110px;
+    width: 100px;
+    height: 200px;
+    background: red;
+  }
+  .ship-wing-left{
+    top: 200px;
+    left: -60px;
+    border-bottom: 100px solid red;
+    border-left: 100px solid transparent;
+  }
+  .ship-wing-right{
+    top: 200px;
+    left: 60px;
+    border-bottom: 100px solid red;
+    border-right: 100px solid transparent;
+  }
+  .ship-tail{
+    top: 280px;
+    left: 20px;
+    border-bottom: 50px solid red; 
+    border-left: 32px solid transparent;
+    border-right: 32px solid transparent;
+  }
+  .ship-tail-fire{
+    top: 330px;
+    left: 32px;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 50px solid yellow;
+  }
+
+
+@keyframes star {
+    0%   { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-0));}
+    25%  { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-25));}
+    50%  { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-50));}
+    75%  { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-75));}
+    100% { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-100));}
 }

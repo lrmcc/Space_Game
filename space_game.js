@@ -1,90 +1,82 @@
-let numParticles = 0;
+let numStars = 0;
 let positions = [0,25,50,75,100];
-let animationType = "";
-let numParticlesForType = 0;
-let animationState = {     
-    preGame: 0,         // background animation only        => animationState.noGame = 0
-    inGame: 1           // game ship on top of background   => animationState.gameStart = 1
-  };
 
-function startAnimation(animType) {
-    animationType = animType;
-    console.log(animationType + " Animation Launched");
-    if (animationType == "preGame") addParticle(10);
-    //if (animationType == "inGame") addParticle(10);
-    runAnimationType();
+function startBackgroundAnimation() {
+    addStars(16);
+    runBackgroundAnimation();
 }
 
-function addParticle(numberParticlesCreate){
-    for(let i = 0; i < numberParticlesCreate; i++){
-        let newParticle = document.createElement("div");
-        newParticle.className = "particle";
-        newParticle.id = i;
-        let particleContainer = document.querySelector('.graphics');
-        particleContainer.appendChild(newParticle);
-        numParticles++;
+function startGame(){
+    addShip();
+    // addBadGuys()
+    // startLevel();
+}
+
+function pauseGame(){
+
+}
+
+function quitGame(){
+    let graphicsContainer = document.querySelector('.graphics');
+    while (graphicsContainer.lastElementChild) {
+        graphicsContainer.removeChild(graphicsContainer.lastElementChild);
     }
-    
+    startBackgroundAnimation();
 }
 
-function runAnimationType(){
-    for(let i = 0; i < numParticles; i++){
-            updateParticles(i, animationType);
+
+
+function addStars(numberStarsCreate){
+    for(let i = 0; i < numberStarsCreate; i++){
+        appendChildToGraphics('star', '', i, '.graphics');
+        numStars++;
     }
 }
 
-function updateParticles(particleID, animationType){
-    let particleToUpdate = document.getElementById(particleID);
-    updateAnimationTime(particleToUpdate);
-    if (animationType == "preGame") updateStarParticle(particleToUpdate);
-    //if (animationType == "inGame") updatePlanetParticle(particleToUpdate);
+function addShip(){
+    appendChildToGraphics('ship-container', '', 999, '.graphics');
+    appendChildToGraphics('ship', '', 999, '.ship-container');
+    let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail', 'ship-tail-fire']
+    for(let i = 0; i < shipComponentents.length; i++){
+        appendChildToGraphics(shipComponentents[i], ' ship-component', 999, '.ship');
+    }
 }
 
-function updateAnimationTime(particleToUpdate) {
+function appendChildToGraphics(childClassName, childAddClassName, childId, parentElement){
+    let graphicsContainer = document.querySelector(parentElement);
+    let childElement = document.createElement("div");
+    childElement.className = childClassName;
+    if (childAddClassName != '') childElement.className += childAddClassName;
+    if (childId != 999) childElement.id = childId;
+    graphicsContainer.appendChild(childElement);
+}
+
+function runBackgroundAnimation(){
+    for(let i = 0; i < numStars; i++){
+        let starToUpdate = document.getElementById(i);
+        updateAnimationTime(starToUpdate);
+        updateStar(starToUpdate);
+    }
+}
+
+function updateAnimationTime(starToUpdate) {
     let time = 10 * Math.random() + 2; 
-    particleToUpdate.style.setProperty('--animation-time', time +'s');
+    starToUpdate.style.setProperty('--star-time', time +'s');
 }
 
-function updatePlanetParticle(particleToUpdate){
-    let postitionTranslateX = [getRandom(0,1400),getRandom(0,1400),getRandom(0,1400),getRandom(0,1400),getRandom(0,1400)];
-    let postitionTranslateY = [900,700,500,300,100];
-    let postitionOpacity = [1,.8,.5,.3,0];
-    let bckgrdColors = ["#e3dede","#bab6b6","#737070","#383838","#121212"];
-    let blurColors = ["#e3dede","#bab6b6","#737070","#383838","#121212"];
-
+// width: 800px; width: 480px; width: 640px; 
+// height: 450px; height: 270px; height: 360px; 
+function updateStar(starToUpdate){
+    let starXValue = getRandom(-80,880);
+    let starYValue = [0,112,225,340,450];
+    let starOpacity = [1,.8,.7,.6,.5];
+    starToUpdate.style.setProperty("animation-timing-function", "linear");
+    starToUpdate.style.setProperty("--star-translateX", starXValue + "px");
     for(let i = 0; i < positions.length; i++){
-        let animateTranslateXVar = '--animation-translateX-' + positions[i];
-        let animateTranslateYVar = '--animation-translateY-' + positions[i];
-        let animateOpacVar = '--animation-opacity-' + positions[i];
-        let animateColorVar = '--animation-color-' + positions[i];
-        let animateBlurVar = '--animation-blur-' + positions[i];
-        particleToUpdate.style.setProperty(animateTranslateXVar, postitionTranslateX[i] + "px");
-        particleToUpdate.style.setProperty(animateTranslateYVar, postitionTranslateY[i] + "px");
-        particleToUpdate.style.setProperty(animateOpacVar, postitionOpacity[i]);
-        particleToUpdate.style.setProperty(animateColorVar, bckgrdColors[i]);
-        particleToUpdate.style.setProperty(animateBlurVar, blurColors[i]);
-    }
-}
-
-function updateStarParticle(particleToUpdate){
-    let downX = getRandom(0,1400);
-    let postitionTranslateX = [downX+50,downX+50,downX+50,downX+50,downX+50];
-    let postitionTranslateY = [100,300,500,700,900];
-    let postitionOpacity = [1,.8,.5,.3,0];
-    let bckgrdColors = ["#336bc4","#2a58a1","#20447d","#0d3678","#082554"];
-    let blurColors = ["#2cb1bf","#2797a3","#1f7680","#145961","#09464d"];
-    particleToUpdate.style.setProperty("animation-timing-function", "linear");
-    for(let i = 0; i < positions.length; i++){
-        let animateTranslateXVar = '--animation-translateX-' + positions[i];
-        let animateTranslateYVar = '--animation-translateY-' + positions[i];
-        let animateOpacVar = '--animation-opacity-' + positions[i];
-        let animateColorVar = '--animation-color-' + positions[i];
-        let animateBlurVar = '--animation-blur-' + positions[i];
-        particleToUpdate.style.setProperty(animateTranslateXVar, postitionTranslateX[i] + "px");
-        particleToUpdate.style.setProperty(animateTranslateYVar, postitionTranslateY[i] + "px");
-        particleToUpdate.style.setProperty(animateOpacVar, postitionOpacity[i]);
-        particleToUpdate.style.setProperty(animateColorVar, bckgrdColors[i]);
-        particleToUpdate.style.setProperty(animateBlurVar, blurColors[i]);
+        let starTranslateYVar = '--star-translateY-' + positions[i];
+        let starOpacVar = '--star-opacity-' + positions[i];
+        starToUpdate.style.setProperty(starTranslateYVar, starYValue[i] + "px");
+        starToUpdate.style.setProperty(starOpacVar, starOpacity[i]);
     }
 }
 
@@ -92,13 +84,23 @@ function getRandom(min, max) {
     return Math.random() * (max - min) + min;
   }
 
-function pauseAnimation(){
-   //pause background animation
-}
+document.onkeydown = checkKey;
 
-function clearAnimation(){
-    let particleContainer = document.querySelector('.graphics');
-    while (particleContainer.lastElementChild) {
-        particleContainer.removeChild(particleContainer.lastElementChild);
-  }
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        alert("up arrow");
+    }
+    else if (e.keyCode == '40') {
+        alert("down arrow");
+    }
+    else if (e.keyCode == '37') {
+       alert("left arrow");
+    }
+    else if (e.keyCode == '39') {
+       alert("right arrow");
+    }
+
 }
