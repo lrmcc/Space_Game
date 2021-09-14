@@ -1,13 +1,27 @@
+let keyPress = '';
 let numStars = 0;
 let positions = [0,25,50,75,100];
+let shipSpeed = 0;
+
+let shipX = 200;
+let shipXMin = -160;
+let shipXMax = 560;
+
+let shipY = 230;
+let shipYMin = -90;
+let shipYMax = 270;
+
 
 function startBackgroundAnimation() {
+    console.log("width: " + document.querySelector('.graphics').style.width);
+    console.log("height: " + document.querySelector('.graphics').style.height);
     addStars(16);
     runBackgroundAnimation();
 }
 
 function startGame(){
     addShip();
+    document.onkeydown = checkKey;
     // addBadGuys()
     // startLevel();
 }
@@ -21,6 +35,7 @@ function quitGame(){
     while (graphicsContainer.lastElementChild) {
         graphicsContainer.removeChild(graphicsContainer.lastElementChild);
     }
+    document.onkeydown = null;
     startBackgroundAnimation();
 }
 
@@ -28,22 +43,23 @@ function quitGame(){
 
 function addStars(numberStarsCreate){
     for(let i = 0; i < numberStarsCreate; i++){
-        appendChildToGraphics('star', '', i, '.graphics');
+        appendChildToGraphics('star', '', i, 'graphics');
         numStars++;
     }
 }
 
 function addShip(){
-    appendChildToGraphics('ship-container', '', 999, '.graphics');
-    appendChildToGraphics('ship', '', 999, '.ship-container');
-    let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail', 'ship-tail-fire']
+    appendChildToGraphics('', '', 'ship-container', 'graphics');
+    appendChildToGraphics('', '', 'ship-wrapper', 'ship-container');
+    appendChildToGraphics('', '', 'ship', 'ship-wrapper');
+    let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire']
     for(let i = 0; i < shipComponentents.length; i++){
-        appendChildToGraphics(shipComponentents[i], ' ship-component', 999, '.ship');
+        appendChildToGraphics('', ' ship-component', shipComponentents[i], 'ship');
     }
 }
 
 function appendChildToGraphics(childClassName, childAddClassName, childId, parentElement){
-    let graphicsContainer = document.querySelector(parentElement);
+    let graphicsContainer = document.getElementById(parentElement);
     let childElement = document.createElement("div");
     childElement.className = childClassName;
     if (childAddClassName != '') childElement.className += childAddClassName;
@@ -84,23 +100,44 @@ function getRandom(min, max) {
     return Math.random() * (max - min) + min;
   }
 
-document.onkeydown = checkKey;
-
 function checkKey(e) {
-
     e = e || window.event;
+    keyPress = e.keyCode;
+    console.log(keyPress);
+    console.log("before shipY: " + shipY);
+    console.log("before shipX: " + shipX);
+    if ( keyPress == '38' || keyPress == '40' || keyPress == '37' || keyPress == '39'  ){
 
-    if (e.keyCode == '38') {
-        alert("up arrow");
+        if ((keyPress == '38') && (shipY > shipYMin)) {
+            shipY = shipY - 40;
+        }
+        else if ((keyPress == '40') && (shipY < shipYMax)) {
+            shipY = shipY + 40;
+        }
+        else if ((keyPress == '37') && (shipX > shipXMin)) {
+            shipX = shipX - 40;
+        }
+        else if ((keyPress == '39') && (shipX < shipXMax)) {
+            shipX = shipX + 40;
+        }
+        shipMove();
     }
-    else if (e.keyCode == '40') {
-        alert("down arrow");
-    }
-    else if (e.keyCode == '37') {
-       alert("left arrow");
-    }
-    else if (e.keyCode == '39') {
-       alert("right arrow");
-    }
-
 }
+
+function shipMove(){
+    let shipContainer = document.getElementById('ship-container');
+    shipContainer.style.transform = `translate(${shipX}px, ${shipY}px)`
+    shipFireOn();
+    setTimeout(shipFireOff, 100);
+}
+
+function shipFireOn(){
+    let shipTailFire = document.getElementById('ship-tail-fire');
+    shipTailFire.style.visibility = "visible";
+    
+ }
+ function shipFireOff(){
+    let shipTailFire = document.getElementById('ship-tail-fire');
+    shipTailFire.style.visibility = "hidden";
+ }
+

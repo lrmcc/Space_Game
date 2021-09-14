@@ -5,18 +5,20 @@
 
 :root {
     --star-time: 4s; 
-
     --star-opacity: 1;
-
     --star-blur: rgb(200, 200, 200);
-    
     --star-translateX: 0px; 
-
     --star-translateY-0: 0px;
     --star-translateY-25: 0px;
     --star-translateY-50: 0px;
     --star-translateY-75: 0px;
     --star-translateY-100: 0px;
+
+    --ship-roation: 0deg; 
+    --ship-rotation-start: 0deg;
+    --ship-rotation-end: 0deg;
+    --ship-translateX: 200px;
+    --ship-translateY: 230px;
   }
 body{
     background-color: rgb(6, 44, 60);
@@ -29,8 +31,6 @@ body{
     grid-column-gap: 10px;
     grid-template-rows: auto;
     grid-row-gap: 10px;
-    /* height: 98%;
-    width: 98%; */
 }
 .game-text{
     font-family: 'Major Mono Display', monospace;
@@ -95,90 +95,93 @@ body{
 
 /* graphics-container houses all game animations */
 .graphics-container{
-    grid-column: 2 / span 6;
-    grid-row: 4 / span 8;
+  grid-column: 2 / span 6;
+  grid-row: 4 / span 8;
 }
 .graphics{
-    width: 800px; /* width: 480px; width: 640px; */
-    height: 450px; /* height: 270px; height: 360px; */
-    margin: 20px;
-    border-radius: 5px;
-    border: solid 8px rgb(2, 57, 81);
-    background-color: #121212;
-    position: absolute;
-    overflow: hidden;
+  width: 800px; /* width: 480px; width: 640px; */
+  height: 450px; /* height: 270px; height: 360px; */
+  margin: 20px;
+  border-radius: 5px;
+  border: solid 8px rgb(2, 57, 81);
+  background-color: #121212;
+  position: absolute;
+  overflow: hidden;
 }
 .star{
-    padding: 3px;
-    top:800;
-    left:600;
-    position: relative;
-    height: 5px;
-    width: 5px;
-    border-color: black;
-    background-color: whitesmoke;
-    border-radius: 50%;
-    box-shadow: 0px 0px 2px 2px #0ff;
-    animation: star var(--star-time) ease infinite;
-    transform: translate(0px,0px);
+  padding: 3px;
+  top:800;
+  left:600;
+  position: relative;
+  height: 5px;
+  width: 5px;
+  border-color: black;
+  background-color: whitesmoke;
+  border-radius: 50%;
+  box-shadow: 0px 0px 2px 2px #0ff;
+  animation: star var(--star-time) ease infinite;
+  transform: translate(0px,0px);
 }
 
-.ship-container{
-    position: absolute;
-    width: 50%;
-    margin: auto;
-    transform: translate(200px, 240px);
-  }
-  .ship{
-    position: relative;
-    width: 50%;
-    margin: auto;
-    transform: scale(0.2);
-  }
-  .ship-component{
-    position: absolute;
-    width: 0;
-    height: 0;
-
-  }
-  .ship-nose{
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    border-bottom: 110px solid red; 
-  }
-  .ship-body{
-    position: absolute;
-    top: 110px;
-    width: 100px;
-    height: 200px;
-    background: red;
-  }
-  .ship-wing-left{
-    top: 200px;
-    left: -60px;
-    border-bottom: 100px solid red;
-    border-left: 100px solid transparent;
-  }
-  .ship-wing-right{
-    top: 200px;
-    left: 60px;
-    border-bottom: 100px solid red;
-    border-right: 100px solid transparent;
-  }
-  .ship-tail{
-    top: 280px;
-    left: 20px;
-    border-bottom: 50px solid red; 
-    border-left: 32px solid transparent;
-    border-right: 32px solid transparent;
-  }
-  .ship-tail-fire{
-    top: 330px;
-    left: 32px;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-top: 50px solid yellow;
-  }
+#ship-container{
+  position: absolute;
+  width: 50%;
+  margin: auto;
+  transform: translate(var(--ship-translateX), var(--ship-translateY));
+}
+#ship-wrapper{
+  transform: rotate(var(--ship-rotation)); 
+}
+#ship{
+  position: relative;
+  width: 50%;
+  margin: auto;
+  transform: scale(0.2);
+}
+.ship-component{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+#ship-nose{
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 110px solid red; 
+}
+#ship-body{
+  position: absolute;
+  top: 110px;
+  width: 100px;
+  height: 200px;
+  background: red;
+}
+#ship-wing-left{
+  top: 200px;
+  left: -60px;
+  border-bottom: 100px solid red;
+  border-left: 100px solid transparent;
+}
+#ship-wing-right{
+  top: 200px;
+  left: 60px;
+  border-bottom: 100px solid red;
+  border-right: 100px solid transparent;
+}
+#ship-tail{
+  top: 280px;
+  left: 20px;
+  border-bottom: 50px solid red; 
+  border-left: 32px solid transparent;
+  border-right: 32px solid transparent;
+}
+#ship-tail-fire{
+  top: 330px;
+  left: 32px;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 50px solid yellow;
+  visibility: hidden;
+}
 
 
 @keyframes star {
@@ -188,3 +191,14 @@ body{
     75%  { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-75));}
     100% { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-100));}
 }
+
+/* @keyframes ship-rotation-animation {
+  0% { transform: rotate(var(--ship-rotation-start));}
+  100% { transform: rotate(var(--ship-rotation-end));}
+}
+
+@keyframes ship-move-animation {
+  0%   { transform: translate(var(--ship-translateX-move), var(--ship-translateY-move));}
+  100% { transform: translate(var(--ship-translateX-move), var(---ship-translateY-move));}
+} */
+
