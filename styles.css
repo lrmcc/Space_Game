@@ -14,11 +14,11 @@
     --star-translateY-75: 0px;
     --star-translateY-100: 0px;
 
-    --ship-roation: 0deg; 
-    --ship-rotation-start: 0deg;
-    --ship-rotation-end: 0deg;
     --ship-translateX: 200px;
     --ship-translateY: 230px;
+  
+    --UFO-translateX: -140px;
+    --UFO-translateY: -60px;
   }
 body{
     background-color: rgb(6, 44, 60);
@@ -184,11 +184,11 @@ body{
 }
 
 
-ufo-container{
+.ufo-container{
   position: absolute;
   width: 50%;
   margin: auto;
-  transform: translate(50px, 80px);
+  transform: translate(var(--UFO-translateX), var(--UFO-translateY));
 }
 .ufo{
   position: relative;

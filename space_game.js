@@ -1,5 +1,6 @@
 let keyPress = '';
 let numStars = 0;
+let numUFOs = 0;
 let positions = [0,25,50,75,100];
 let shipSpeed = 0;
 
@@ -11,6 +12,13 @@ let shipY = 230;
 let shipYMin = -90;
 let shipYMax = 270;
 
+let UFOX = -140;
+let UFOXMin = -160;
+let UFOXMax = 560;
+
+let UFOY = -60;
+let UFOYMin = -90;
+let UFOYMax = 270;
 
 function startBackgroundAnimation() {
     console.log("width: " + document.querySelector('.graphics').style.width);
@@ -21,7 +29,7 @@ function startBackgroundAnimation() {
 
 function startGame(){
     addShip();
-    addUFO();
+    addUFO(6);
     document.onkeydown = checkKey;
     // addBadGuys()
     // startLevel();
@@ -59,13 +67,19 @@ function addShip(){
     }
 }
 
-function addUFO(){
-    appendChildToGraphics('ufo-container', '', 'ufo-container', 'graphics');
-    appendChildToGraphics('ufo', '', 'ufo', 'ufo-container');
-    let UFOComponentents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
-    for(let i = 0; i < UFOComponentents.length; i++){
-        appendChildToGraphics(UFOComponentents[i], ' ufo-component', UFOComponentents[i], 'ufo');
+function addUFO(numUFOsCreate){
+    for (let i = 0; i < numUFOsCreate; i++){
+        appendChildToGraphics('ufo-container', '',`ufo-container${i}`, 'graphics');
+        appendChildToGraphics('ufo', '', `ufo${i}`, `ufo-container${i}`);
+        let UFOComponentents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
+        for(let j = 0; j < UFOComponentents.length; j++){
+            appendChildToGraphics(UFOComponentents[j], ' ufo-component', `${UFOComponentents[j]}${i}`, `ufo${i}`);
+        }
+        let UFOContainer = document.getElementById(`ufo-container${i}`);
+        UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`
+        UFOX = UFOX + 120;
     }
+    
 }
 
 function appendChildToGraphics(childClassName, childAddClassName, childId, parentElement){
@@ -113,9 +127,7 @@ function getRandom(min, max) {
 function checkKey(e) {
     e = e || window.event;
     keyPress = e.keyCode;
-    console.log(keyPress);
-    console.log("before shipY: " + shipY);
-    console.log("before shipX: " + shipX);
+    // console.log(keyPress);
     if ( keyPress == '38' || keyPress == '40' || keyPress == '37' || keyPress == '39'  ){
 
         if ((keyPress == '38') && (shipY > shipYMin)) {
