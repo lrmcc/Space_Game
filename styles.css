@@ -130,7 +130,7 @@ body{
   transform: translate(var(--ship-translateX), var(--ship-translateY));
 }
 #ship-wrapper{
-  transform: rotate(var(--ship-rotation)); 
+  margin: auto;
 }
 #ship{
   position: relative;
@@ -184,6 +184,125 @@ body{
 }
 
 
+ufo-container{
+  position: absolute;
+  width: 50%;
+  margin: auto;
+  transform: translate(50px, 80px);
+}
+.ufo{
+  position: relative;
+  width: 50%;
+  margin: auto;
+  transform: scale(0.2); 
+}
+.ufo-component{
+  position: absolute;
+}
+.ufo-glass{
+  top: -14px;
+  left: 80px;
+  width: 220px;
+  height: 120px;
+  border-radius: 48%;
+  background: lightgreen;
+  z-index:10;
+  opacity: 40%;
+}
+.ufo-alien{
+  left:200px;
+  display: block;
+  width: 32px;
+  height: 45px;
+  background-color: DarkOliveGreen;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  z-index: 9;
+}
+.ufo-alien-eye-left{
+  top:8px;
+  left:206px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-left: 6px solid red;
+  border-bottom: 4px solid transparent;
+  z-index:9;
+}
+.ufo-alien-eye-right{
+  top:8px;
+  left:218px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-left: 6px solid red;
+  border-bottom: 4px solid transparent;
+  z-index:9;
+}
+.ufo-alien-body{
+  top: 45px;
+  left:200px;
+  border-bottom: 40px solid DarkOliveGreen;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  height: 0;
+  width: 20px;
+  z-index: 9;
+}
+.ufo-top{
+  top: 36px;
+  left: 90px;
+  width: 200px;
+  height: 60px;
+  background-color: darkgreen;
+  border-radius: 50%;
+  z-index: 8;
+}
+.ufo-body-upper{
+  top: 30px;
+  left: 50px;
+  width: 300px;
+  height: 100px;
+  background-color: limegreen;
+  border-radius: 50%;
+  z-index: 7;
+}
+.ufo-body-lower{
+  top: 30px;
+  left: 50px;
+  width: 300px;
+  height: 120px;
+  background-color: green;
+  border-radius: 50%;
+}
+.ufo-antenna-pole{
+  top: 20px;
+  left: 300px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 50px solid darkgreen;
+  z-index: 8;
+}
+.ufo-antenna-base{
+  top: 66px;
+  left: 300px;
+  width: 20px;
+  height: 10px;
+  background: darkgreen;
+  border-radius: 50%;
+  z-index: 8;
+}
+.ufo-antenna-bead{
+  top: 20px;
+  left: 302px;
+  width: 16px;
+  height: 16px;
+  background: mediumseagreen;
+  border-radius: 50%;
+  z-index: 8;
+}
+
 @keyframes star {
     0%   { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-0));}
     25%  { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-25));}
@@ -191,14 +310,3 @@ body{
     75%  { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-75));}
     100% { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-100));}
 }
-
-/* @keyframes ship-rotation-animation {
-  0% { transform: rotate(var(--ship-rotation-start));}
-  100% { transform: rotate(var(--ship-rotation-end));}
-}
-
-@keyframes ship-move-animation {
-  0%   { transform: translate(var(--ship-translateX-move), var(--ship-translateY-move));}
-  100% { transform: translate(var(--ship-translateX-move), var(---ship-translateY-move));}
-} */
-

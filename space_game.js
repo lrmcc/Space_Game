@@ -21,6 +21,7 @@ function startBackgroundAnimation() {
 
 function startGame(){
     addShip();
+    addUFO();
     document.onkeydown = checkKey;
     // addBadGuys()
     // startLevel();
@@ -55,6 +56,15 @@ function addShip(){
     let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire']
     for(let i = 0; i < shipComponentents.length; i++){
         appendChildToGraphics('', ' ship-component', shipComponentents[i], 'ship');
+    }
+}
+
+function addUFO(){
+    appendChildToGraphics('ufo-container', '', 'ufo-container', 'graphics');
+    appendChildToGraphics('ufo', '', 'ufo', 'ufo-container');
+    let UFOComponentents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
+    for(let i = 0; i < UFOComponentents.length; i++){
+        appendChildToGraphics(UFOComponentents[i], ' ufo-component', UFOComponentents[i], 'ufo');
     }
 }
 
