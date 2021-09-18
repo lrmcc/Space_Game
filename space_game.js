@@ -1,42 +1,49 @@
 let keyPress = '';
-let numStars = 0;
-let numUFOs = 0;
-let positions = [0,25,50,75,100];
-let shipSpeed = 0;
+let gameInProgress = 0;
 
+let numberStarsCreate = 16;
+let numStars = 0;
+let starKeyframes = [0,25,50,75,100];
+let starYValue = [-100,50,200,350,500];
+
+let shipSpeed = 0;
 let shipX = 200;
 let shipXMin = -160;
 let shipXMax = 560;
-
-let shipY = 230;
+let shipY = 330;
 let shipYMin = -90;
 let shipYMax = 270;
+let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire'];
 
+let numUFOs = 0;
 let UFOX = -140;
 let UFOXMin = -160;
 let UFOXMax = 560;
-
 let UFOY = -60;
 let UFOYMin = -90;
 let UFOYMax = 270;
+let UFOComponents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
 
-function startBackgroundAnimation() {
-    console.log("width: " + document.querySelector('.graphics').style.width);
-    console.log("height: " + document.querySelector('.graphics').style.height);
-    addStars(16);
-    runBackgroundAnimation();
-}
+let numberLasersCreate = 5;
+let laserX = 0;
+let laserY = 0;
+let laserIDsActive = [];
 
 function startGame(){
-    addShip();
-    addUFO(6);
-    document.onkeydown = checkKey;
-    // addBadGuys()
-    // startLevel();
-}
-
-function pauseGame(){
-
+    if (!gameInProgress){
+        console.log("Starting game");
+        addShip();
+        for(let i = 0; i < numberLasersCreate; i++){
+            console.log("Adding Laser");
+            addLaser(`laser${i}`);
+        }
+        // addUFO(6);
+        document.onkeydown = checkKey;
+        document.getElementById('graphics').focus();
+    }
+    else console.log("Game already in progress");
+    gameInProgress = 1;
+    
 }
 
 function quitGame(){
@@ -45,41 +52,79 @@ function quitGame(){
         graphicsContainer.removeChild(graphicsContainer.lastElementChild);
     }
     document.onkeydown = null;
+    // UFOX = -140;
+    // UFOY = -60;
+    numStars = 0;
+    gameInProgress = 0;
     startBackgroundAnimation();
 }
 
+function pauseGame(){
 
+}
 
-function addStars(numberStarsCreate){
+function startBackgroundAnimation() {
     for(let i = 0; i < numberStarsCreate; i++){
-        appendChildToGraphics('star', '', i, 'graphics');
-        numStars++;
+        addStar(`star${i}`);
     }
 }
 
+function addStar(starID){
+    appendChildToGraphics('star', '',starID, 'graphics');
+    let star = document.getElementById(starID);
+    let starTime = getStarTime();
+    setStarStyles(star, starTime, getStarXValue());
+    setTimeout(() => {resetStarStyles(star)}, Math.floor(starTime * 1000));
+    numStars++;
+}
+
+function setStarStyles(star, starTime, starXValue){
+    star.style.setProperty('--star-time', starTime +'s');
+    star.style.setProperty("--star-translateX", starXValue + "px");
+}
+function resetStarStyles(star){
+    let starTime = getStarTime();
+    setStarStyles(star, starTime, getStarXValue());
+    setTimeout(() => {resetStarStyles(star)}, Math.floor(starTime * 1000));
+}
+
+let getStarTime = () => {return 10 * Math.random() + 3; }
+
+let getStarXValue = () => { return Math.random() * (880 - (-80)) + -80;}
+
 function addShip(){
+    console.log("Adding Ship");
     appendChildToGraphics('', '', 'ship-container', 'graphics');
     appendChildToGraphics('', '', 'ship-wrapper', 'ship-container');
     appendChildToGraphics('', '', 'ship', 'ship-wrapper');
-    let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire']
     for(let i = 0; i < shipComponentents.length; i++){
         appendChildToGraphics('', ' ship-component', shipComponentents[i], 'ship');
     }
 }
 
+function shipMove(){
+    let shipContainer = document.getElementById('ship-container');
+    shipContainer.style.transform = `translate(${shipX}px, ${shipY}px)`;
+    console.log("shipContainer.style.transform: " + shipContainer.style.transform);
+    let shipTailFire = document.getElementById('ship-tail-fire');
+    shipFireOn(shipTailFire);
+    setTimeout(shipFireOff(shipTailFire), 100);
+}
+
+let shipFireOn = (shipTailFire) => {shipTailFire.style.visibility = "visible";}
+let shipFireOff = (shipTailFire) => {shipTailFire.style.visibility = "hidden";}
+
 function addUFO(numUFOsCreate){
     for (let i = 0; i < numUFOsCreate; i++){
         appendChildToGraphics('ufo-container', '',`ufo-container${i}`, 'graphics');
         appendChildToGraphics('ufo', '', `ufo${i}`, `ufo-container${i}`);
-        let UFOComponentents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
-        for(let j = 0; j < UFOComponentents.length; j++){
-            appendChildToGraphics(UFOComponentents[j], ' ufo-component', `${UFOComponentents[j]}${i}`, `ufo${i}`);
+        for(let j = 0; j < UFOComponents.length; j++){
+            appendChildToGraphics(UFOComponents[j], ' ufo-component', `${UFOComponents[j]}${i}`, `ufo${i}`);
         }
         let UFOContainer = document.getElementById(`ufo-container${i}`);
         UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`
         UFOX = UFOX + 120;
     }
-    
 }
 
 function appendChildToGraphics(childClassName, childAddClassName, childId, parentElement){
@@ -91,44 +136,11 @@ function appendChildToGraphics(childClassName, childAddClassName, childId, paren
     graphicsContainer.appendChild(childElement);
 }
 
-function runBackgroundAnimation(){
-    for(let i = 0; i < numStars; i++){
-        let starToUpdate = document.getElementById(i);
-        updateAnimationTime(starToUpdate);
-        updateStar(starToUpdate);
-    }
-}
-
-function updateAnimationTime(starToUpdate) {
-    let time = 10 * Math.random() + 2; 
-    starToUpdate.style.setProperty('--star-time', time +'s');
-}
-
-// width: 800px; width: 480px; width: 640px; 
-// height: 450px; height: 270px; height: 360px; 
-function updateStar(starToUpdate){
-    let starXValue = getRandom(-80,880);
-    let starYValue = [0,112,225,340,450];
-    let starOpacity = [1,.8,.7,.6,.5];
-    starToUpdate.style.setProperty("animation-timing-function", "linear");
-    starToUpdate.style.setProperty("--star-translateX", starXValue + "px");
-    for(let i = 0; i < positions.length; i++){
-        let starTranslateYVar = '--star-translateY-' + positions[i];
-        let starOpacVar = '--star-opacity-' + positions[i];
-        starToUpdate.style.setProperty(starTranslateYVar, starYValue[i] + "px");
-        starToUpdate.style.setProperty(starOpacVar, starOpacity[i]);
-    }
-}
-
-function getRandom(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
 function checkKey(e) {
     e = e || window.event;
     keyPress = e.keyCode;
-    // console.log(keyPress);
-    if ( keyPress == '38' || keyPress == '40' || keyPress == '37' || keyPress == '39'  ){
+    console.log(keyPress);
+    if ( keyPress == '38' || keyPress == '40' || keyPress == '37' || keyPress == '39' ){
 
         if ((keyPress == '38') && (shipY > shipYMin)) {
             shipY = shipY - 40;
@@ -143,23 +155,36 @@ function checkKey(e) {
             shipX = shipX + 40;
         }
         shipMove();
+        updateLaserAnimKeyframes();
+    } else if (keyPress = '32'){
+        console.log("pressed spacebar");
+        if (laserIDsActive.length < 5) fireLaser();
+        else console.log("Max lasers deployed");
     }
 }
 
-function shipMove(){
-    let shipContainer = document.getElementById('ship-container');
-    shipContainer.style.transform = `translate(${shipX}px, ${shipY}px)`
-    shipFireOn();
-    setTimeout(shipFireOff, 100);
+async function fireLaser(){
+    let laserIDNumber = laserIDsActive.length;
+    let laserID = `laser${laserIDNumber}`
+    let laser = document.getElementById(laserID);
+    laserIDsActive.push(laserIDNumber);
+    laser.classList.add("laser");
+    await sleep(2000);
+    laser.classList.remove("laser");
+    laserIDsActive.shift();
+ }
+
+ let addLaser = (laserID) => { appendChildToGraphics('', '',laserID, 'graphics');}
+
+function updateLaserAnimKeyframes(){
+    laserX = shipX + 48;
+    laserY = shipY + 80;
+    document.documentElement.style.setProperty('--laser-translateX', laserX + "px");
+    document.documentElement.style.setProperty('--laser-translateY', laserY + "px");
+    console.log("document.documentElement.style.setProperty('--laser-translateX', shipX + px): " + document.documentElement.style.getPropertyValue("--laser-translateX"));
+    console.log("document.documentElement.style.setProperty('--laser-translateY', laserY + px): " + document.documentElement.style.getPropertyValue("--laser-translateY"));
 }
 
-function shipFireOn(){
-    let shipTailFire = document.getElementById('ship-tail-fire');
-    shipTailFire.style.visibility = "visible";
-    
- }
- function shipFireOff(){
-    let shipTailFire = document.getElementById('ship-tail-fire');
-    shipTailFire.style.visibility = "hidden";
- }
-
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

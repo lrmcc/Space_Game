@@ -1,24 +1,32 @@
-/* For understanind css 'display: grid' paradigm: https://css-tricks.com/snippets/css/complete-guide-grid/ */
 *{
     box-sizing: border-box;
 }
 
 :root {
     --star-time: 4s; 
-    --star-opacity: 1;
     --star-blur: rgb(200, 200, 200);
     --star-translateX: 0px; 
-    --star-translateY-0: 0px;
-    --star-translateY-25: 0px;
-    --star-translateY-50: 0px;
-    --star-translateY-75: 0px;
-    --star-translateY-100: 0px;
+    --star-translateY-0: -100px;
+    --star-translateY-25: 50px;
+    --star-translateY-50: 200px;
+    --star-translateY-75: 350px;
+    --star-translateY-100: 500px;
 
     --ship-translateX: 200px;
     --ship-translateY: 230px;
   
     --UFO-translateX: -140px;
     --UFO-translateY: -60px;
+
+    --laser-time: 2s;
+    --laser-translateX: 250px;
+    --laser-translateY-0: 300px;
+    --laser-translateY-25: 50px;
+    --laser-translateY-50: 0px;
+    --laser-translateY-75: -150px;
+    --laser-translateY-100: -200px;
+
+    --graphics-time: 4s;
   }
 body{
     background-color: rgb(6, 44, 60);
@@ -107,19 +115,20 @@ body{
   background-color: #121212;
   position: absolute;
   overflow: hidden;
+  animation: graphics var(--graphics-time) linear 1;
 }
 .star{
-  padding: 3px;
+  padding: 2px;
   top:800;
   left:600;
   position: relative;
-  height: 5px;
-  width: 5px;
+  height: 4px;
+  width: 4px;
   border-color: black;
   background-color: whitesmoke;
   border-radius: 50%;
-  box-shadow: 0px 0px 2px 2px #0ff;
-  animation: star var(--star-time) ease infinite;
+  box-shadow: 0px 0px 2px 2px rgb(193, 195, 195);
+  animation: star var(--star-time) linear infinite;
   transform: translate(0px,0px);
 }
 
@@ -303,10 +312,43 @@ body{
   z-index: 8;
 }
 
-@keyframes star {
-    0%   { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-0));}
-    25%  { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-25));}
-    50%  { opacity: var(--star-opacity); box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-50));}
-    75%  { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-75));}
-    100% { opacity: var(--star-opacity); box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-100));}
+.laser{
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  left: 136px;
+  background: red;
+  border-radius: 10px / 5px;
+  animation: laser var(--laser-time) linear 1;
+  transform: translate(var(--ship-translateX), var(--ship-translateY));
 }
+
+@keyframes graphics {
+  0%   { opacity: 0; }
+  25%  { opacity: 0.2; }
+  50%  { opacity: 0.4; }
+  75%  { opacity: 0.7;}
+  100% { opacity: 1; }
+}
+
+@keyframes star {
+    0%   { opacity: 1; box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-0));}
+    25%  { opacity: 0.8; box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-25));}
+    50%  { opacity: 0.6; box-shadow: 0px -2px 0px 1px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-50));}
+    75%  { opacity: 0.3; box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-75));}
+    100% { opacity: 0; box-shadow: 0px -1px 0px 0px var(--star-blur); transform: translate(var(--star-translateX), var(--star-translateY-100));}
+}
+
+@keyframes laser {
+  0%  { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-0));}
+  25%  { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-25));}
+  50%  { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-50));}
+  75%  { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-75));}
+  100% { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-100));}
+}
+
+/* 
+  graphics sizes for @media 
+  width: 800px; width: 480px; width: 640px; 
+  height: 450px; height: 270px; height: 360px;  
+*/
