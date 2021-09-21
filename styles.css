@@ -14,9 +14,14 @@
 
     --ship-translateX: 0px;
     --ship-translateY: 0px;
-  
-    --UFO-translateX: -140px;
-    --UFO-translateY: -60px;
+
+    --UFO-time: 5s;
+    --UFO-translateX-0: 0px;
+    --UFO-translateX-25: 0px;
+    --UFO-translateX-50: 0px;
+    --UFO-translateX-75: 0px;
+    --UFO-translateX-100: 0px;
+    --UFO-translateY: 0px;
 
     --laser-time: 2s;
     --laser-translateX: 0px;
@@ -198,6 +203,7 @@ body{
   width: 50%;
   margin: auto;
   transform: translate(var(--UFO-translateX), var(--UFO-translateY));
+  animation: UFO-easy-right var(--UFO-time) linear 1;
 }
 .ufo{
   position: relative;
@@ -345,6 +351,21 @@ body{
   50%  { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-50));}
   75%  { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-75));}
   100% { opacity: 1; transform: translate(var(--laser-translateX), var(--laser-translateY-100));}
+}
+
+@keyframes UFO-easy-right {
+  0%  { transform: translate(var(--UFO-translateX-0), var(--UFO-translateY));}
+  25%  { transform: translate(var(--UFO-translateX-25), var(--UFO-translateY));}
+  50%  { transform: translate(var(--UFO-translateX-50), var(--UFO-translateY));}
+  75%  { transform: translate(var(--UFO-translateX-75), var(--UFO-translateY));}
+  100% { transform: translate(var(--UFO-translateX-100), var(--UFO-translateY));}
+}
+@keyframes UFO-easy-left {
+  0%  { transform: translate(var(--UFO-translateX-100), var(--UFO-translateY));}
+  25%  { transform: translate(var(--UFO-translateX-75), var(--UFO-translateY));}
+  50%  { transform: translate(var(--UFO-translateX-50), var(--UFO-translateY));}
+  75%  { transform: translate(var(--UFO-translateX-25), var(--UFO-translateY));}
+  100% { transform: translate(var(--UFO-translateX-0), var(--UFO-translateY));}
 }
 
 /* 

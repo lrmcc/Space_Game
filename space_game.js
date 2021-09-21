@@ -1,37 +1,38 @@
 let keyPress = '';
 let gameInProgress = 0;
+let shipX = 200;
+let shipY = 220;
+let shipMinX = -160;
+let shipMaxX = 560;
+let shipMinY = -60;
+let shipMaxY = 270;
 
-let keyFrames = ['0','25','50','75','100'];
-
-let numberStarsCreate = 16;
-let numStars = 0;
+let numStarsCreate = 16;
+let numStarsActive = 0;
 let starYValue = [-100,50,200,350,500];
 
-let shipSpeed = 0;
-let shipX = 200;
-let shipXMin = -160;
-let shipXMax = 560;
-let shipY = 220;
-let shipYMin = -60;
-let shipYMax = 270;
-let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire'];
-
-let numUFOs = 0;
+let numUFOsCreate = 0;
 let UFOX = -140;
-let UFOXMin = -160;
-let UFOXMax = 560;
 let UFOY = -60;
-let UFOYMin = -90;
-let UFOYMax = 270;
-let UFOComponents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
+let UFOAnimBit = 0;
+// let UFOMinX = -160;
+// let UFOMaxX = 560;
+// let UFOMinY = -90;
+// let UFOMaxY = 270;
 
 let numberLasersCreate = 5;
 let laserX = 246;
 let laserY = 160;
 let laserIDsActive = [];
 
+let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire'];
+let keyFrames = ['0','25','50','75','100'];
+let UFOComponents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
+
+
+
 function startBackgroundAnimation() {
-    for(let i = 0; i < numberStarsCreate; i++){
+    for(let i = 0; i < numStarsCreate; i++){
         addStar(`star${i}`);
     }
 }
@@ -39,15 +40,15 @@ function startBackgroundAnimation() {
 function startGame(){
     if (!gameInProgress){
         console.log("Starting game");
-        setCSSRootVariable('--ship-translateX', shipX, 'px');
-        setCSSRootVariable('--ship-translateY', shipY, 'px');
+        setShipCSSRootVariables();
         addShip();
         for(let i = 0; i < numberLasersCreate; i++){
             console.log("Adding Laser");
             addLaser(`laser${i}`);
         }
         setLaserAnimKeyframes();
-        // addUFO(6);
+        setUFOAnimKeyframes();
+        addUFO(1);
         document.onkeydown = checkKey;
     }
     gameInProgress = 1;
@@ -59,9 +60,9 @@ function quitGame(){
         graphicsContainer.removeChild(graphicsContainer.lastElementChild);
     }
     document.onkeydown = null;
-    // UFOX = -140;
-    // UFOY = -60;
-    numStars = 0;
+    UFOX = -140;
+    UFOY = -60;
+    numStarsActive = 0;
     gameInProgress = 0;
     startBackgroundAnimation();
 }
@@ -76,7 +77,7 @@ function addStar(starID){
     let starTime = getStarTime();
     setStarStyles(star, starTime, getStarXValue());
     setTimeout(() => {resetStarStyles(star)}, Math.floor(starTime * 1000));
-    numStars++;
+    numStarsActive++;
 }
 
 function setStarStyles(star, starTime, starXValue){
@@ -117,8 +118,8 @@ let shipFireOn = (shipTailFire) => {shipTailFire.style.visibility = "visible";}
 
 let shipFireOff = (shipTailFire) => {shipTailFire.style.visibility = "hidden";}
 
-function addUFO(numUFOsCreate){
-    for (let i = 0; i < numUFOsCreate; i++){
+function addUFO(numUFOs){
+    for (let i = 0; i < numUFOs; i++){
         appendChildToGraphics('ufo-container', '',`ufo-container${i}`, 'graphics');
         appendChildToGraphics('ufo', '', `ufo${i}`, `ufo-container${i}`);
         for(let j = 0; j < UFOComponents.length; j++){
@@ -127,7 +128,18 @@ function addUFO(numUFOsCreate){
         let UFOContainer = document.getElementById(`ufo-container${i}`);
         UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`
         UFOX = UFOX + 120;
+        activateUFOAnimation(UFOContainer);
     }
+}
+
+async function activateUFOAnimation(UFOContainer){
+    while (UFOContainer){
+        await sleep(5000);
+        UFOContainer.style.animation = "UFO-easy-left var(--UFO-time) linear 1";
+        await sleep(5000);
+        UFOContainer.style.animation = "UFO-easy-right var(--UFO-time) linear 1";
+    }
+    
 }
 
 let addLaser = (laserID) => { appendChildToGraphics('', '',laserID, 'graphics');}
@@ -147,16 +159,16 @@ function checkKey(e) {
     console.log(keyPress);
     if ( keyPress == '38' || keyPress == '40' || keyPress == '37' || keyPress == '39' ){
 
-        if ((keyPress == '38') && (shipY > shipYMin)) {
+        if ((keyPress == '38') && (shipY > shipMinY)) {
             shipY = shipY - 40;
         }
-        else if ((keyPress == '40') && (shipY < shipYMax)) {
+        else if ((keyPress == '40') && (shipY < shipMaxY)) {
             shipY = shipY + 40;
         }
-        else if ((keyPress == '37') && (shipX > shipXMin)) {
+        else if ((keyPress == '37') && (shipX > shipMinX)) {
             shipX = shipX - 40;
         }
-        else if ((keyPress == '39') && (shipX < shipXMax)) {
+        else if ((keyPress == '39') && (shipX < shipMaxX)) {
             shipX = shipX + 40;
         }
         shipMove();
@@ -179,12 +191,23 @@ async function fireLaser(){
     laserIDsActive.shift();
  }
  
+ function setShipCSSRootVariables(){
+    setCSSRootVariable('--ship-translateX', shipX, 'px');
+    setCSSRootVariable('--ship-translateY', shipY, 'px');
+ }
  function setLaserAnimKeyframes(){
     laserX = shipX + 48;
     laserY = shipY;
     setCSSRootVariable('--laser-translateX', laserX , 'px');
     for (let i = 0; i < keyFrames.length; i++){
         setCSSRootVariable(`--laser-translateY-${keyFrames[i]}`, laserY - (i*100), 'px');
+    }
+}
+
+function setUFOAnimKeyframes(){
+    setCSSRootVariable('--UFO-translateY', UFOY, 'px');
+    for (let i = 0; i < keyFrames.length; i++){
+        setCSSRootVariable(`--UFO-translateX-${keyFrames[i]}`, UFOX + (i*100), 'px');
     }
 }
 
