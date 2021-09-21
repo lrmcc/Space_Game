@@ -1,17 +1,18 @@
 let keyPress = '';
 let gameInProgress = 0;
 
+let keyFrames = ['0','25','50','75','100'];
+
 let numberStarsCreate = 16;
 let numStars = 0;
-let starKeyframes = [0,25,50,75,100];
 let starYValue = [-100,50,200,350,500];
 
 let shipSpeed = 0;
 let shipX = 200;
 let shipXMin = -160;
 let shipXMax = 560;
-let shipY = 330;
-let shipYMin = -90;
+let shipY = 220;
+let shipYMin = -60;
 let shipYMax = 270;
 let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire'];
 
@@ -25,25 +26,31 @@ let UFOYMax = 270;
 let UFOComponents = ['ufo-glass', 'ufo-alien','ufo-alien-eye-left','ufo-alien-eye-right', 'ufo-alien-body','ufo-top','ufo-body-upper', 'ufo-body-lower','ufo-antenna-pole','ufo-antenna-base','ufo-antenna-bead'];
 
 let numberLasersCreate = 5;
-let laserX = 0;
-let laserY = 0;
+let laserX = 246;
+let laserY = 160;
 let laserIDsActive = [];
+
+function startBackgroundAnimation() {
+    for(let i = 0; i < numberStarsCreate; i++){
+        addStar(`star${i}`);
+    }
+}
 
 function startGame(){
     if (!gameInProgress){
         console.log("Starting game");
+        setCSSRootVariable('--ship-translateX', shipX, 'px');
+        setCSSRootVariable('--ship-translateY', shipY, 'px');
         addShip();
         for(let i = 0; i < numberLasersCreate; i++){
             console.log("Adding Laser");
             addLaser(`laser${i}`);
         }
+        setLaserAnimKeyframes();
         // addUFO(6);
         document.onkeydown = checkKey;
-        document.getElementById('graphics').focus();
     }
-    else console.log("Game already in progress");
     gameInProgress = 1;
-    
 }
 
 function quitGame(){
@@ -63,12 +70,6 @@ function pauseGame(){
 
 }
 
-function startBackgroundAnimation() {
-    for(let i = 0; i < numberStarsCreate; i++){
-        addStar(`star${i}`);
-    }
-}
-
 function addStar(starID){
     appendChildToGraphics('star', '',starID, 'graphics');
     let star = document.getElementById(starID);
@@ -82,6 +83,7 @@ function setStarStyles(star, starTime, starXValue){
     star.style.setProperty('--star-time', starTime +'s');
     star.style.setProperty("--star-translateX", starXValue + "px");
 }
+
 function resetStarStyles(star){
     let starTime = getStarTime();
     setStarStyles(star, starTime, getStarXValue());
@@ -112,6 +114,7 @@ function shipMove(){
 }
 
 let shipFireOn = (shipTailFire) => {shipTailFire.style.visibility = "visible";}
+
 let shipFireOff = (shipTailFire) => {shipTailFire.style.visibility = "hidden";}
 
 function addUFO(numUFOsCreate){
@@ -127,6 +130,8 @@ function addUFO(numUFOsCreate){
     }
 }
 
+let addLaser = (laserID) => { appendChildToGraphics('', '',laserID, 'graphics');}
+ 
 function appendChildToGraphics(childClassName, childAddClassName, childId, parentElement){
     let graphicsContainer = document.getElementById(parentElement);
     let childElement = document.createElement("div");
@@ -155,7 +160,7 @@ function checkKey(e) {
             shipX = shipX + 40;
         }
         shipMove();
-        updateLaserAnimKeyframes();
+        setLaserAnimKeyframes();
     } else if (keyPress = '32'){
         console.log("pressed spacebar");
         if (laserIDsActive.length < 5) fireLaser();
@@ -173,18 +178,16 @@ async function fireLaser(){
     laser.classList.remove("laser");
     laserIDsActive.shift();
  }
-
- let addLaser = (laserID) => { appendChildToGraphics('', '',laserID, 'graphics');}
-
-function updateLaserAnimKeyframes(){
+ 
+ function setLaserAnimKeyframes(){
     laserX = shipX + 48;
-    laserY = shipY + 80;
-    document.documentElement.style.setProperty('--laser-translateX', laserX + "px");
-    document.documentElement.style.setProperty('--laser-translateY', laserY + "px");
-    console.log("document.documentElement.style.setProperty('--laser-translateX', shipX + px): " + document.documentElement.style.getPropertyValue("--laser-translateX"));
-    console.log("document.documentElement.style.setProperty('--laser-translateY', laserY + px): " + document.documentElement.style.getPropertyValue("--laser-translateY"));
+    laserY = shipY;
+    setCSSRootVariable('--laser-translateX', laserX , 'px');
+    for (let i = 0; i < keyFrames.length; i++){
+        setCSSRootVariable(`--laser-translateY-${keyFrames[i]}`, laserY - (i*100), 'px');
+    }
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+let setCSSRootVariable = (varName, value, valueString)  => { document.documentElement.style.setProperty(`${varName}`, value + valueString);}  
+
+let sleep = (ms) => { return new Promise(resolve => setTimeout(resolve, ms));}

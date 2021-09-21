@@ -12,19 +12,19 @@
     --star-translateY-75: 350px;
     --star-translateY-100: 500px;
 
-    --ship-translateX: 200px;
-    --ship-translateY: 230px;
+    --ship-translateX: 0px;
+    --ship-translateY: 0px;
   
     --UFO-translateX: -140px;
     --UFO-translateY: -60px;
 
     --laser-time: 2s;
-    --laser-translateX: 250px;
-    --laser-translateY-0: 300px;
-    --laser-translateY-25: 50px;
+    --laser-translateX: 0px;
+    --laser-translateY-0: 0px;
+    --laser-translateY-25: 0px;
     --laser-translateY-50: 0px;
-    --laser-translateY-75: -150px;
-    --laser-translateY-100: -200px;
+    --laser-translateY-75: 0px;
+    --laser-translateY-100: 0px;
 
     --graphics-time: 4s;
   }
