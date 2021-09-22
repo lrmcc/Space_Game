@@ -12,17 +12,20 @@ let numStarsActive = 0;
 let starYValue = [-100,50,200,350,500];
 
 let numUFOsCreate = 0;
-let UFOX = -140;
+let UFOX = -180;
+let UFOMinX = -180;
+let UFOMaxX = 530;
 let UFOY = -60;
 let UFOAnimBit = 0;
-// let UFOMinX = -160;
-// let UFOMaxX = 560;
+let UFODirection = 1;
 // let UFOMinY = -90;
 // let UFOMaxY = 270;
 
 let numberLasersCreate = 5;
 let laserX = 246;
 let laserY = 160;
+let laserMinY = -100;
+let laserMaxY = 270;
 let laserIDsActive = [];
 
 let shipComponentents = ['ship-nose', 'ship-body','ship-wing-left','ship-wing-right', 'ship-tail','ship-tail-fire','ship-tail-fire'];
@@ -46,8 +49,6 @@ function startGame(){
             console.log("Adding Laser");
             addLaser(`laser${i}`);
         }
-        setLaserAnimKeyframes();
-        setUFOAnimKeyframes();
         addUFO(1);
         document.onkeydown = checkKey;
     }
@@ -126,23 +127,39 @@ function addUFO(numUFOs){
             appendChildToGraphics(UFOComponents[j], ' ufo-component', `${UFOComponents[j]}${i}`, `ufo${i}`);
         }
         let UFOContainer = document.getElementById(`ufo-container${i}`);
-        UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`
-        UFOX = UFOX + 120;
+        UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`;
+        //UFOX = UFOX + 120;
+        recordUFOPosition(UFOContainer);
         activateUFOAnimation(UFOContainer);
     }
 }
 
-async function activateUFOAnimation(UFOContainer){
-    while (UFOContainer){
-        await sleep(5000);
-        UFOContainer.style.animation = "UFO-easy-left var(--UFO-time) linear 1";
-        await sleep(5000);
-        UFOContainer.style.animation = "UFO-easy-right var(--UFO-time) linear 1";
+function activateUFOAnimation(UFOContainer){
+    let id = setInterval(frame, 10);
+    function frame() {
+        if (UFOX == UFOMaxX) {
+            UFODirection = -1;
+            // clearInterval(id);
+        } else if (UFOX == UFOMinX){
+            UFODirection = 1;
+            // clearInterval(id);
+        } 
+        UFOX += UFODirection;
+        UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`;
     }
-    
 }
 
-let addLaser = (laserID) => { appendChildToGraphics('', '',laserID, 'graphics');}
+async function recordUFOPosition(UFOContainer){
+    let regex = /(-*[0-9]+)/g;
+    let transformValues = '';
+    while (UFOContainer){
+        await sleep(500);
+        transformValues = UFOContainer.style.transform.match(regex);
+        //console.log(transformValues[0]);
+    }
+}
+
+let addLaser = (laserID) => { appendChildToGraphics('laser', '',laserID, 'graphics');}
  
 function appendChildToGraphics(childClassName, childAddClassName, childId, parentElement){
     let graphicsContainer = document.getElementById(parentElement);
@@ -172,7 +189,6 @@ function checkKey(e) {
             shipX = shipX + 40;
         }
         shipMove();
-        setLaserAnimKeyframes();
     } else if (keyPress = '32'){
         console.log("pressed spacebar");
         if (laserIDsActive.length < 5) fireLaser();
@@ -184,32 +200,42 @@ async function fireLaser(){
     let laserIDNumber = laserIDsActive.length;
     let laserID = `laser${laserIDNumber}`
     let laser = document.getElementById(laserID);
+    //recordLaserPosition(laser)
+    activateFireLaserAnimation(laser)
     laserIDsActive.push(laserIDNumber);
-    laser.classList.add("laser");
     await sleep(2000);
-    laser.classList.remove("laser");
     laserIDsActive.shift();
  }
+
+ function activateFireLaserAnimation(laser){
+    laserX = shipX + 48;
+    laserY = shipY;
+    let id = setInterval(frame, 5);
+    function frame() {
+        if (laserY == laserMinY) {
+            clearInterval(id);
+        } else {
+            laserY--;
+            laser.style.transform = `translate(${laserX}px, ${laserY}px)`;
+            //console.log(laser.style.transform);
+        }
+    }
+}
+
+async function recordLaserPosition(laser){
+    let regex = /(-*[0-9]+)/g;
+    let transformValues = '';
+    while (laser){
+        await sleep(200);
+        transformValues = laser.style.transform.match(regex);
+        console.log("LaserY: " + laser[1]);
+    }
+}
  
  function setShipCSSRootVariables(){
     setCSSRootVariable('--ship-translateX', shipX, 'px');
     setCSSRootVariable('--ship-translateY', shipY, 'px');
  }
- function setLaserAnimKeyframes(){
-    laserX = shipX + 48;
-    laserY = shipY;
-    setCSSRootVariable('--laser-translateX', laserX , 'px');
-    for (let i = 0; i < keyFrames.length; i++){
-        setCSSRootVariable(`--laser-translateY-${keyFrames[i]}`, laserY - (i*100), 'px');
-    }
-}
-
-function setUFOAnimKeyframes(){
-    setCSSRootVariable('--UFO-translateY', UFOY, 'px');
-    for (let i = 0; i < keyFrames.length; i++){
-        setCSSRootVariable(`--UFO-translateX-${keyFrames[i]}`, UFOX + (i*100), 'px');
-    }
-}
 
 let setCSSRootVariable = (varName, value, valueString)  => { document.documentElement.style.setProperty(`${varName}`, value + valueString);}  
 
