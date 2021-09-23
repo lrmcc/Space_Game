@@ -307,6 +307,7 @@ body{
   left: 136px;
   background: red;
   border-radius: 10px / 5px;
+  opacity: 0;
   transform: translate(var(--ship-translateX), var(--ship-translateY));
 }
 
