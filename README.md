@@ -1,9 +1,23 @@
-# Space_Web_Game
-An HTML/CSS/JS Space Game connected to Python backend code for storing scores on a SQL database
+# **Space_Web_Game**
+An HTML/CSS/JS Space Game titled *Galactic Star Field Fighter*
 
-Front-end game code is connected to Python backend code server for scoring logic and storage.
-Python backend code server connected to SQL database for storing the top 25 scores and player initials.
-The server code will correctly score running games, determine if score is in the top 25 scores, and if so allow user to attach name or initials to the score.
-The server code will update the database as needed.
 
-This file will contain instructions on how to launch locally and also how to deploy to the web.
+## Objective
+When the game is started the player tries to get as high a score as possible by hitting UFOs with the spaceships's laser blasts.
+
+## Purpose
+This game will function as a front-end example to allow the Game Stats Backend to collect data, execute score evaluation code, and store valid data in a SQL database.
+The Game Stats Backend is the the Minimum Viable Product (MVP) of a web project GitHub user lrmcc is working towards developing.
+
+## Target Audience
+Anyone interested.
+
+## Technology Requirement 
+A computer with a modern browser.
+
+## Budget 
+$0
+
+## Deployment
+A 1.0 version of the game is ready to be launched as of 23 Sep 2021. 
+### To launch the game: download the repo (unzip or clone) and open the space_game.html file with a modern browser.
