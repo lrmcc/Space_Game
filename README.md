@@ -7,7 +7,7 @@ When the game is started the player tries to get as high a score as possible by 
 
 ## Purpose
 This game will function as a front-end example to allow the Game Stats Backend to collect data, execute score evaluation code, and store valid data in a SQL database.
-The Game Stats Backend is the the Minimum Viable Product (MVP) of a web project GitHub user lrmcc is working towards developing.
+The Game Stats Backend is the Minimum Viable Product (MVP) of a web project GitHub user lrmcc is working towards developing.
 
 ## Target Audience
 Anyone interested.
