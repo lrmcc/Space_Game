@@ -21,8 +21,8 @@ let UFOMinX = -180;
 let UFOMaxX = 530;
 let UFOY = -60;
 let UFODirection = 1;
-// let UFOMinY = -90;
-// let UFOMaxY = 270;
+
+let UFOResetX = [-179, -38, 104, 246, 388, 529]
 let UFOElementID = '';
 let UFOHit = 0;
 
@@ -61,6 +61,7 @@ function startGame(){
 }
 
 function quitGame(){
+    console.log("quitting game");
     let graphicsContainer = document.querySelector('.graphics');
     while (graphicsContainer.lastElementChild) {
         graphicsContainer.removeChild(graphicsContainer.lastElementChild);
@@ -82,6 +83,9 @@ async function startTimer(){
     let timeElement = document.getElementById('game-time-value');
     while (time > -1){
         timeElement.innerText = time;
+        if(time == 0){
+            quitGame();
+        }
         await sleep(1000);
         time--;
     }
@@ -144,26 +148,32 @@ function addUFO(numUFOs){
         }
         UFOElementID = `ufo-container${i}`;
         let UFOContainer = document.getElementById(UFOElementID);
-        UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`;
+        setUFOTransform(UFOContainer);
         activateUFOAnimation(UFOContainer);
     }
 }
 
-function activateUFOAnimation(UFOContainer){
+ function activateUFOAnimation(UFOContainer){
     let id = setInterval(frame, 10);
-    function frame() {
+    async function frame() {
         if (UFOX == UFOMaxX) {
             UFODirection = -1;
         } else if (UFOX == UFOMinX){
             UFODirection = 1;
         } else if (UFOHit){
+            UFOHit = 0;
             UFOContainer.style.opacity = '0';
             score++;
             setScore();
             clearInterval(id);
+            await sleep(Math.floor(Math.random() * 6000));
+            UFOX = UFOResetX[Math.floor(Math.random() * 6)];
+            setUFOTransform(UFOContainer);
+            UFOContainer.style.opacity = '1';
+            activateUFOAnimation(UFOContainer);
         }
         UFOX += UFODirection;
-        UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`;
+        setUFOTransform(UFOContainer);
     }
 }
 
@@ -237,13 +247,13 @@ async function checkLaserHit(laser){
     while(laserIsMoving){
         await sleep(10);
         if(laserX > (UFOX) && laserX < (UFOX+100)){
-            console.log("woohoo")
+            console.log("x-HIT")
             if(laserY < (UFOY+20) && laserY > (UFOY-50)){
-                console.log("laserX: " + laserX);
-                console.log("UFOX: " + UFOX);
-                console.log("laserY: " + laserY);
-                console.log("UFOY: " + UFOY);
-                console.log("HIT!");
+                //console.log("laserX: " + laserX);
+                //console.log("UFOX: " + UFOX);
+                //console.log("laserY: " + laserY);
+                //console.log("UFOY: " + UFOY);
+                console.log("y-HIT!");
                 laserIsMoving = 0;
                 UFOHit = 1;
             }
@@ -255,6 +265,9 @@ function setScore(){
     document.getElementById('game-score-value').innerText = score;
 }
 
+function setUFOTransform(UFOContainer){
+    UFOContainer.style.transform = `translate(${UFOX}px, ${UFOY}px)`;
+}
 function setShipCSSRootVariables(){
     setCSSRootVariable('--ship-translateX', shipX, 'px');
     setCSSRootVariable('--ship-translateY', shipY, 'px');
