@@ -46,6 +46,7 @@ function startBackgroundAnimation() {
 function startGame(){
     if (!gameInProgress){
         console.log("Starting game");
+        document.getElementById('startButton').style.zIndex = 0;
         score = 0;
         setScore();
         setShipCSSRootVariables();
@@ -72,6 +73,7 @@ function quitGame(){
     startBackgroundAnimation();
     time = 0;
     document.getElementById('game-time-value').innerText = time;
+    document.getElementById('startButton').style.zIndex = 1;
 }
 
 function pauseGame(){
