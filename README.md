@@ -1,5 +1,5 @@
 # **Space_Web_Game**
-An HTML/CSS/JS Space Game titled *Galactic Star Field Fighter*
+A space game titled *Galactic Star Field Fighter* put together with HTML/CSS/JS.
 
 
 ## Objective
