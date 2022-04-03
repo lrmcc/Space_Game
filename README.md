@@ -1,4 +1,4 @@
-# **Space_Web_Game**
+# **Space_Game**
 A space game titled *Galactic Star Field Fighter* put together with HTML/CSS/JS.
 
 
